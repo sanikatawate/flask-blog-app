@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container"
+    style="margin: auto;
+        padding: 40px;
+        border: 2px solid rgb(239, 239, 239);">
+    <article class="blog-post row flex-nowrap">
+        <img class="rounded-circle col-md-3" style="height: 65px; width: 65px; padding:0%;"
+            src="{{ url_for('static', filename='profile_pics/'+ post.author.image_file) }}"/>
+        <div class="media-body col-md-8">
+        <h2 class="blog-post-title">{{post.title}}</h2>
+        <p class="blog-post-meta">
+            {{post.date_posted.strftime('%Y-%m-%d') }} by <a href="#">{{post.author.username}}</a>
+        </p>
+        <p class="blog-content">{{post.content}}</p>
+        <div class="row flex-nowrap">
+            {% if current_user.is_authenticated %}
+                <div class="col-1 d-flex justify-content-start align-items-start">
+                    <a class="btn btn-sm btn-outline-secondary" href=" {{url_for('update_post', post_id=post.id) }} "
+                    >Update</a>
+                </div>
+                <div class="col-1 d-flex justify-content-start align-items-start">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            This Post will be permanently deleted, are you sure?
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <form action="{{ url_for('delete_post', post_id=post.id)}}" method="POST">
+                                <input class="btn btn-danger" type="submit" value="Delete">
+                            </form>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </article>
+    </div>
+{% endblock content%}
